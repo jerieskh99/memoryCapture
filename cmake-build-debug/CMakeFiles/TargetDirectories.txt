@@ -1,0 +1,4 @@
+/Users/jeries/CLionProjects/memoryCapture/cmake-build-debug/CMakeFiles/memoryCapture.dir
+/Users/jeries/CLionProjects/memoryCapture/cmake-build-debug/CMakeFiles/YourExecutableName.dir
+/Users/jeries/CLionProjects/memoryCapture/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/jeries/CLionProjects/memoryCapture/cmake-build-debug/CMakeFiles/rebuild_cache.dir
