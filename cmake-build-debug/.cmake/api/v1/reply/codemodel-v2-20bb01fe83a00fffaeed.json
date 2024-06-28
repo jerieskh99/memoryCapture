@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "memoryCapture",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "YourExecutableName::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-YourExecutableName-Debug-4f02981a153ad8a95a59.json",
+					"name" : "YourExecutableName",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "memoryCapture::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-memoryCapture-Debug-bd9d47aac9bd458b1b99.json",
+					"name" : "memoryCapture",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/jeries/CLionProjects/memoryCapture/cmake-build-debug",
+		"source" : "/Users/jeries/CLionProjects/memoryCapture"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

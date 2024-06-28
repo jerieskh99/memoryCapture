@@ -68,3 +68,44 @@ void deltaManager::calculateDeltaParallel(const vector<char>& baseImage, const v
     }
 }
 
+double deltaManager::calculateDeltaParallelApple(char* baseImage, char* newImage) {
+    return 0.0;
+}
+
+complexDeltaManager::complexDeltaManager(distanceFunction *magnitudeDistanceFunc,
+                                         distanceFunction *orientationDistanceFunc, unsigned int memoryUSize,
+                                         unsigned long long int captureSizeMega)
+                                         :dist_func_magnitude(magnitudeDistanceFunc),
+                                         dist_func_orientation(orientationDistanceFunc),
+                                         memoryUnit(memoryUSize), cp() {
+
+    full_delta = 0;
+    captureSize = captureSizeMega << 20;
+
+    memory_units_number = captureSize / memoryUSize;
+}
+
+complexDeltaManager::~complexDeltaManager(){
+    delete dist_func_magnitude;
+    delete dist_func_orientation;
+}
+
+void complexDeltaManager::calculateDelta(const vector<char> &baseImage, const vector<char> &newImage) {
+    for (int i=0; i<memory_units_number; i++)
+    {
+        auto mag = (float)dist_func_magnitude->calculateMUDistanceBetweenPointsC(baseImage, newImage, memoryUnit,
+                                                                            i*memoryUnit,
+                                                                            i*memoryUnit);
+        auto orient = (float)dist_func_orientation->calculateMUDistanceBetweenPointsC(baseImage, newImage, memoryUnit,
+                                                                                i*memoryUnit,
+                                                                                i*memoryUnit);
+
+        std::complex<float> cd = std::polar(mag, orient);
+        curr_delta_blocks.push_back(cd);
+    }
+}
+
+vector<std::complex<float>> complexDeltaManager::calculateCepstrum() {
+    return cepstrum::computeCepstrum(curr_delta_blocks);
+}
+

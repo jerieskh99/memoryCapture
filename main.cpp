@@ -7,7 +7,7 @@
 #include <vector>
 #include <iomanip> // For std::setw and std::setfill
 #include <sstream> // For std::stringstream
-
+#include <complex>
 
 int test_754(float num, float othernum) {
     FP754 number(5.5f);
@@ -50,42 +50,85 @@ std::vector<char> fileToHexVector(const char* filename) {
 
 
 
+//int main(int argc, char* argv[]) {
+//    if (argc < 3) {
+//        std::cerr << "Usage: " << argv[0] << " image1 image2" << std::endl;
+//        return 1; // Return an error code if not enough arguments are provided
+//    }
+//
+//    auto* df = new kullbackLeibler(8192);
+//    deltaManager dm(df, 8192, 12);
+//
+//    std::vector<char> file1Hex = fileToHexVector("/Users/jeries/CLionProjects/memoryCapture/mempartial_20240417151929.hex");
+//    std::vector<char> file2Hex = fileToHexVector("/Users/jeries/CLionProjects/memoryCapture/mempartial_20240417151958.hex");
+//
+//    if (file1Hex.empty() || file2Hex.empty()) {
+//        delete df; // Clean up GrayDistance object
+//        return 2; // Return an error code if files could not be read
+//    }
+//
+//    dm.calculateDelta(file1Hex, file2Hex);
+//
+//    vector<double> res = dm.getDeltaBlocks();
+//
+//    // Write the results to a file
+//    std::ofstream outFile("/Users/jeries/CLionProjects/memoryCapture/outputKL.csv");
+//    if (!outFile) {
+//        std::cerr << "Failed to open the output file." << std::endl;
+//        delete df;
+//        return 3; // Return an error code if file could not be opened
+//    }
+//
+//    outFile << "index,value\n";
+//    for (size_t i = 0; i < res.size(); ++i) {
+//        outFile << i << "," << res[i] << "\n";
+//    }
+//
+//    outFile.close();
+//    //delete dm; // Clean up GrayDistance object
+//    return 0;
+//
+//}
+
 int main(int argc, char* argv[]) {
     if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " image1 image2" << std::endl;
         return 1; // Return an error code if not enough arguments are provided
     }
 
-    auto* df = new GrayDistance();
-    deltaManager dm(df, 4096, 12);
+    auto* df_mag  = new GrayDistance();
+    auto* df_orient = new cosineDistance();
+    complexDeltaManager cdm(df_mag, df_orient, 8192, 12);
 
     std::vector<char> file1Hex = fileToHexVector("/Users/jeries/CLionProjects/memoryCapture/mempartial_20240417151929.hex");
     std::vector<char> file2Hex = fileToHexVector("/Users/jeries/CLionProjects/memoryCapture/mempartial_20240417151958.hex");
 
     if (file1Hex.empty() || file2Hex.empty()) {
-        delete df; // Clean up GrayDistance object
+        delete df_mag; // Clean up GrayDistance object
+        delete df_orient; // Clean up GrayDistance object
         return 2; // Return an error code if files could not be read
     }
 
-    dm.calculateDelta(file1Hex, file2Hex);
+    cdm.calculateDelta(file1Hex, file2Hex);
 
-    vector<double> res = dm.getDeltaBlocks();
+    vector<std::complex<float>> delta_res = cdm.getDeltaBlocks();
 
     // Write the results to a file
-    std::ofstream outFile("/Users/jeries/CLionProjects/memoryCapture/output.csv");
+    std::ofstream outFile("/Users/jeries/CLionProjects/memoryCapture/outputKL.csv");
     if (!outFile) {
         std::cerr << "Failed to open the output file." << std::endl;
-        delete df;
+        delete df_mag;
+        delete df_orient;
         return 3; // Return an error code if file could not be opened
     }
 
-    outFile << "index,value\n";
-    for (size_t i = 0; i < res.size(); ++i) {
-        outFile << i << "," << res[i] << "\n";
+    outFile << "index,complex,magnitude,orientation\n";
+    for (size_t i = 0; i < delta_res.size(); ++i) {
+        outFile << i << ", " << delta_res[i] << ", " << std::abs(delta_res[i]) << ", " <<std::arg(delta_res[i]) << "\n";
     }
 
     outFile.close();
     //delete dm; // Clean up GrayDistance object
     return 0;
-    
+
 }
